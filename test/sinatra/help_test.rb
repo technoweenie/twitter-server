@@ -2,8 +2,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'helper'))
 
 class ApiHelpTest < TwitterServer::TestCase
   class HelpApp < Sinatra::Base
-    helpers  Sinatra::TwitterServer::Helpers
-    register Sinatra::TwitterServer::Help
+    register Sinatra::TwitterServer
 
     twitter_help { |params| "ok: #{params.inspect}"}
   end

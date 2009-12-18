@@ -14,8 +14,16 @@ module Sinatra
       end
     end
 
-    autoload :Help, 'sinatra/twitter_server/help'
-  end
+    def self.registered(app)
+      app.helpers Sinatra::TwitterServer::Helpers
+    end
 
-  helpers Sinatra::TwitterServer::Helpers
+    # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-help%C2%A0test
+    def twitter_help
+      get "/help/test.:format" do
+        options = api_options(:format)
+        yield(options)
+      end
+    end
+  end
 end
