@@ -47,4 +47,6 @@ module Sinatra
       end
     end
   end
+
+  register TwitterServer
 end
