@@ -1,10 +1,14 @@
 require 'rubygems'
-require 'test/unit'
-require 'shoulda'
+require 'context'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
+require 'rack/test'
 require 'twitter_server'
 
-class Test::Unit::TestCase
+module TwitterServer
+  class TestCase < Test::Unit::TestCase
+    include Rack::Test::Methods
+  end
 end
