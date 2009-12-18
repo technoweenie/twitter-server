@@ -15,4 +15,9 @@ class ApiHelpTest < TwitterServer::TestCase
     get '/help/test.xml'
     assert_equal 'ok: {:format=>"xml"}', last_response.body
   end
+
+  it "returns 'Ok' for :json format" do
+    get '/help/test.json'
+    assert_equal 'ok: {:format=>"json"}', last_response.body
+  end
 end
