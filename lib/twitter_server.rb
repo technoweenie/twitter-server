@@ -18,8 +18,16 @@ module Sinatra
       app.helpers Sinatra::TwitterServer::Helpers
     end
 
+    # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-friends_timeline
+    def twitter_statuses_friends_timeline
+      get "/statuses/friends_timeline.:format" do
+        options = api_options(:format, :since_id, :max_id, :count, :page)
+        yield(options)
+      end
+    end
+
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-user_timeline
-    def twitter_user_statuses
+    def twitter_statuses_user_timeline
       get "/statuses/user_timeline.:format" do
         options = api_options(:format, :user_id, :screen_name, :since_id, :max_id, :count, :page)
         yield(options)
