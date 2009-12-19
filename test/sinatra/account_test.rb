@@ -13,7 +13,7 @@ class ApiAccountTest < TwitterServer::TestCase
 
   it "returns user xml" do
     get '/account/verify_credentials.xml'
-    assert_xml last_response.body do |xml|
+    assert_xml do |xml|
       xml.user do
         xml.id_ 1
       end

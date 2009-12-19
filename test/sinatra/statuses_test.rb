@@ -25,7 +25,7 @@ class ApiStatusesTest < TwitterServer::TestCase
   describe "user timeline" do
     it "requests without :id return statuses xml" do
       get "/statuses/user_timeline.xml?user_id=1&screen_name=2&since_id=3&max_id=4&count=5&page=6"
-      assert_xml last_response.body do |xml|
+      assert_xml do |xml|
         xml.statuses do
           xml.status do
             xml.text_ "id="
@@ -49,7 +49,7 @@ class ApiStatusesTest < TwitterServer::TestCase
 
     it "requests with :id return statuses xml" do
       get "/statuses/user_timeline/bob.xml?user_id=1&screen_name=2&since_id=3&max_id=4&count=5&page=6"
-      assert_xml last_response.body do |xml|
+      assert_xml do |xml|
         xml.statuses do
           xml.status do
             xml.text_ "id=bob"
@@ -75,7 +75,7 @@ class ApiStatusesTest < TwitterServer::TestCase
   describe "home timeline" do
     it "returns statuses xml" do
       get "/statuses/home_timeline.xml?since_id=1&max_id=2&count=3&page=4"
-      assert_xml last_response.body do |xml|
+      assert_xml do |xml|
         xml.statuses do
           [:id, :user_id, :screen_name].each do |key|
             xml.status do
@@ -103,7 +103,7 @@ class ApiStatusesTest < TwitterServer::TestCase
   describe "friends timeline" do
     it "returns statuses xml" do
       get "/statuses/friends_timeline.xml?since_id=1&max_id=2&count=3&page=4"
-      assert_xml last_response.body do |xml|
+      assert_xml do |xml|
         xml.statuses do
           [:id, :user_id, :screen_name].each do |key|
             xml.status do
