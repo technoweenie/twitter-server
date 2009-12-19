@@ -8,7 +8,7 @@ SUPER alpha, ruby API will change!
 
 * Everything on http://apiwiki.twitter.com/Twitter-API-Documentation that's not implemented
 * XML/JSON parsing
-* JSON rendering (hey, Tweetie uses XML)
+* Better XML/JSON/ATOM/RSS rendering
 * handle basic auth and oauth
 * cleanup pluggable renderers
 * gem packaging

@@ -1,6 +1,8 @@
 require 'nokogiri'
 module TwitterServer
   module Renderer
+    # Base Renderer classes should possibly store schemas for the objects (status, user, etc).
+    # Do some basic ruby type conversions for the format the api expects.
     class NokogiriRenderer
       def initialize(root)
         @xml = Nokogiri::XML::Builder.new
@@ -45,6 +47,7 @@ module TwitterServer
       # <geo_enabled>true</geo_enabled> <!-- Not yet part of the current payload.  [COMING SOON] -->
       # <verified>true</verified>
       def user(user)
+        return if user.nil? || user.empty?
         [:id, :name, :screen_name].each do |key|
           @xml.send "#{key}_", user[key] if user.key?(key)
         end
@@ -65,6 +68,7 @@ module TwitterServer
       # <favorited>false</favorited>
       # <in_reply_to_screen_name></in_reply_to_screen_name>
       def status(status)
+        return if user.nil? || user.empty?
         [:id, :created_at, :text, :truncated, :in_reply_to_status_id, :in_reply_to_user_id, :favorited, :in_reply_to_screen_name].each do |key|
           @xml.send("#{key}_", status[key]) if status.key?(key)
         end

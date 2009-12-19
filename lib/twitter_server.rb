@@ -5,6 +5,10 @@ module TwitterServer
     attr_writer :xml_renderer
   end
 
+  # IDEA: have set renderers for JSON/XML/ATOM/RSS
+  # Then Sinatra::TwitterServer::Helpers only has a single render method
+  # that delegates to the given renderer for the request format.
+  # Assume the renderers know how to do their thing.
   def self.xml_renderer
     @xml_renderer || Renderer::NokogiriRenderer
   end
