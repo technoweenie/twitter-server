@@ -4,8 +4,18 @@ class ApiStatusesTest < TwitterServer::TestCase
   class StatusesApp < Sinatra::Base
     register Sinatra::TwitterServer
 
-    twitter_statuses_friends_timeline { |params| "friend status (#{params.delete(:format)}): #{params.inspect}"}
-    twitter_statuses_user_timeline    { |params| "user status (#{params.delete(:format)}): #{params.inspect}"}
+    
+    resp = lambda do |params|
+      user = {:id => 1, :screen_name => 'user'}
+      statuses = []
+      [:id, :user_id, :screen_name, :since_id, :max_id, :count, :page].each do |key|
+        statuses << {:text => "#{key}=#{params[key]}", :user => user}
+      end
+      statuses
+    end
+    twitter_statuses_home_timeline    &resp
+    twitter_statuses_friends_timeline &resp
+    twitter_statuses_user_timeline    &resp
   end
 
   def app
@@ -13,32 +23,107 @@ class ApiStatusesTest < TwitterServer::TestCase
   end
 
   describe "user timeline" do
-    describe "requests without :id" do
-      [:user_id, :screen_name, :since_id, :max_id, :count, :page].each do |key|
-        it "takes #{key} param for :xml format" do
-          get "/statuses/user_timeline.xml?#{key}=1"
-          assert_equal %(user status (xml): {:#{key}=>"1"}), last_response.body
+    it "requests without :id return statuses xml" do
+      get "/statuses/user_timeline.xml?user_id=1&screen_name=2&since_id=3&max_id=4&count=5&page=6"
+      assert_xml last_response.body do |xml|
+        xml.statuses do
+          xml.status do
+            xml.text_ "id="
+            xml.user do
+              xml.id_ 1
+              xml.screen_name 'user'
+            end
+          end
+          [:user_id, :screen_name, :since_id, :max_id, :count, :page].each_with_index do |key, idx|
+            xml.status do
+              xml.text_ "#{key}=#{idx+1}"
+              xml.user do
+                xml.id_ 1
+                xml.screen_name 'user'
+              end
+            end
+          end
         end
       end
     end
 
-    describe "requests with :id" do
-      [:user_id, :screen_name, :since_id, :max_id, :count, :page].each do |key|
-        it "takes #{key} param for :xml format" do
-          get "/statuses/user_timeline/bob.xml?#{key}=1"
-          assert_match /^user status \(xml\)\: \{/, last_response.body
-          assert_match /\:#{key}\=\>\"1\"/,    last_response.body
-          assert_match /\:id\=\>\"bob\"/,      last_response.body
+    it "requests with :id return statuses xml" do
+      get "/statuses/user_timeline/bob.xml?user_id=1&screen_name=2&since_id=3&max_id=4&count=5&page=6"
+      assert_xml last_response.body do |xml|
+        xml.statuses do
+          xml.status do
+            xml.text_ "id=bob"
+            xml.user do
+              xml.id_ 1
+              xml.screen_name 'user'
+            end
+          end
+          [:user_id, :screen_name, :since_id, :max_id, :count, :page].each_with_index do |key, idx|
+            xml.status do
+              xml.text_ "#{key}=#{idx+1}"
+              xml.user do
+                xml.id_ 1
+                xml.screen_name 'user'
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe "home timeline" do
+    it "returns statuses xml" do
+      get "/statuses/home_timeline.xml?since_id=1&max_id=2&count=3&page=4"
+      assert_xml last_response.body do |xml|
+        xml.statuses do
+          [:id, :user_id, :screen_name].each do |key|
+            xml.status do
+              xml.text_ "#{key}="
+              xml.user do
+                xml.id_ 1
+                xml.screen_name 'user'
+              end
+            end
+          end
+          [:since_id, :max_id, :count, :page].each_with_index do |key, idx|
+            xml.status do
+              xml.text_ "#{key}=#{idx+1}"
+              xml.user do
+                xml.id_ 1
+                xml.screen_name 'user'
+              end
+            end
+          end
         end
       end
     end
   end
 
   describe "friends timeline" do
-    [:since_id, :max_id, :count, :page].each do |key|
-      it "takes #{key} param for :xml format" do
-        get "/statuses/friends_timeline.xml?#{key}=1"
-        assert_equal %(friend status (xml): {:#{key}=>"1"}), last_response.body
+    it "returns statuses xml" do
+      get "/statuses/friends_timeline.xml?since_id=1&max_id=2&count=3&page=4"
+      assert_xml last_response.body do |xml|
+        xml.statuses do
+          [:id, :user_id, :screen_name].each do |key|
+            xml.status do
+              xml.text_ "#{key}="
+              xml.user do
+                xml.id_ 1
+                xml.screen_name 'user'
+              end
+            end
+          end
+          [:since_id, :max_id, :count, :page].each_with_index do |key, idx|
+            xml.status do
+              xml.text_ "#{key}=#{idx+1}"
+              xml.user do
+                xml.id_ 1
+                xml.screen_name 'user'
+              end
+            end
+          end
+        end
       end
     end
   end

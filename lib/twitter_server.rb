@@ -1,6 +1,17 @@
 require 'sinatra/base'
 
 module TwitterServer
+  class << self
+    attr_writer :xml_renderer
+  end
+
+  def self.xml_renderer
+    @xml_renderer || Renderer::NokogiriRenderer
+  end
+
+  module Renderer
+    autoload :NokogiriRenderer, 'renderers/nokogiri_renderer'
+  end
 end
 
 module Sinatra
@@ -11,34 +22,64 @@ module Sinatra
           params.include?(key.to_s) ? memo.update(key => params[key]) : memo
         end
       end
+
+      def render_xml_statuses(statuses)
+        render_xml(:statuses) do |r|
+          statuses.each do |st|
+            r.node(:status) do
+              r.status(st)
+            end
+          end
+        end
+      end
+
+      def render_xml(root)
+        ::TwitterServer.xml_renderer.new(root) do |renderer|
+          yield renderer
+        end.to_s
+      end
     end
 
     def self.registered(app)
       app.helpers Sinatra::TwitterServer::Helpers
     end
 
+    # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-home_timeline
+    def twitter_statuses_home_timeline
+      get "/statuses/home_timeline.:format" do
+        statuses = yield api_options(:format, :since_id, :max_id, :count, :page)
+        render_xml_statuses(statuses)
+      end
+    end
+
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-friends_timeline
     def twitter_statuses_friends_timeline
       get "/statuses/friends_timeline.:format" do
-        yield api_options(:format, :since_id, :max_id, :count, :page)
+        statuses = yield api_options(:format, :since_id, :max_id, :count, :page)
+        render_xml_statuses(statuses)
       end
     end
 
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-user_timeline
     def twitter_statuses_user_timeline
       get "/statuses/user_timeline.:format" do
-        yield api_options(:format, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        statuses = yield api_options(:format, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        render_xml_statuses(statuses)
       end
 
       get "/statuses/user_timeline/:id.:format" do
-        yield api_options(:format, :id, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        statuses = yield api_options(:format, :id, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        render_xml_statuses(statuses)
       end
     end
 
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-account%C2%A0verify_credentials
     def twitter_account_verify_credentials
       get "/account/verify_credentials.:format" do
-        yield api_options(:format)
+        user = yield api_options(:format)
+        render_xml(:user) do |r|
+          r.user(user)
+        end
       end
     end
 
