@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["rick"]
+  s.authors = ["technoweenie"]
   s.date = %q{2009-12-19}
-  s.description = %q{TODO: longer description of your gem}
+  s.description = %q{Twitter API implementation on top of Sinatra}
   s.email = %q{technoweenie@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -29,13 +29,14 @@ Gem::Specification.new do |s|
      "test/helper.rb",
      "test/sinatra/account_test.rb",
      "test/sinatra/help_test.rb",
-     "test/sinatra/statuses_test.rb"
+     "test/sinatra/statuses_test.rb",
+     "twitter_server.gemspec"
   ]
   s.homepage = %q{http://github.com/technoweenie/twitter_server}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{Twitter API implementation on top of Sinatra}
   s.test_files = [
     "test/helper.rb",
      "test/sinatra/account_test.rb",

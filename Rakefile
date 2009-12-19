@@ -5,11 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "twitter_server"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Twitter API implementation on top of Sinatra}
+    gem.description = %Q{Twitter API implementation on top of Sinatra}
     gem.email = "technoweenie@gmail.com"
     gem.homepage = "http://github.com/technoweenie/twitter_server"
-    gem.authors = ["rick"]
+    gem.authors = ["technoweenie"]
     gem.add_development_dependency "context", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
