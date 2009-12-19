@@ -1,6 +1,16 @@
 = twitter_server
 
-Description goes here.
+See demo/faker_server.rb for an in-memory, randomly generated, read-only twitter server.
+
+SUPER alpha, ruby API will change!
+
+== TODO
+
+* Everything on http://apiwiki.twitter.com/Twitter-API-Documentation that's not implemented
+* XML/JSON parsing
+* JSON rendering (hey, Tweetie uses XML)
+* cleanup pluggable renderers
+* gem packaging
 
 == Note on Patches/Pull Requests
  
