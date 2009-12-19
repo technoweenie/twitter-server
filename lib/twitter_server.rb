@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'active_support/core_ext/hash'
 
 module TwitterServer
 end
@@ -8,9 +7,9 @@ module Sinatra
   module TwitterServer
     module Helpers
       def api_options(*keys)
-        options = params.slice(*keys.map! { |k| k.to_s })
-        options.symbolize_keys!
-        options
+        keys.inject({}) do |memo, key|
+          params.include?(key.to_s) ? memo.update(key => params[key]) : memo
+        end
       end
     end
 
