@@ -68,7 +68,7 @@ module TwitterServer
       # <favorited>false</favorited>
       # <in_reply_to_screen_name></in_reply_to_screen_name>
       def status(status)
-        return if user.nil? || user.empty?
+        return if status.nil? || status.empty?
         [:id, :created_at, :text, :truncated, :in_reply_to_status_id, :in_reply_to_user_id, :favorited, :in_reply_to_screen_name].each do |key|
           @xml.send("#{key}_", status[key]) if status.key?(key)
         end
