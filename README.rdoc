@@ -1,12 +1,59 @@
 = twitter_server
 
-See demo/faker_server.rb for an in-memory, randomly generated, read-only twitter server.
+This is an attempt at a Twitter API implementation on top of Sinatra.  This is 
+for all the people that experience Twitter purely through one or more of the 
+great clients on top of it.
 
-SUPER alpha, ruby API will change!
+SUPER alpha, ruby API will probably change!
+
+== USAGE
+
+The public API that you should be concerned with is the Sinatra API.  Similar 
+to how Sinatra lets you respond to HTTP requests, this lets you respond to
+Twitter requests
+
+  require 'sinatra'
+  require 'twitter_server'
+
+  get '/' do
+    'hello world'
+  end
+
+  twitter_statuses_home_timeline do |params|
+    ...
+  end
+
+The Sinatra Extension API is used, so you can also create separate Sinatra
+classes and mount them separately.
+
+  require 'sinatra/base'
+  require 'twitter_server'
+
+  class MyTwitterApp < Sinatra::Base
+    register Sinatra::TwitterServer
+
+    get '/' do
+      'hello world'
+    end
+
+    twitter_statuses_home_timeline do |params|
+      ...
+    end
+  end
+
+== IDEAS
+
+* Wrap a blogging service (see Wordpress, Tumblr)
+* Get up-to-date event notifications on internal systems
+* Uh yes, clone Twitter.  You can probably rewrite it in a weekend :)
+
+See demo/faker_server.rb for an in-memory, randomly generated, read-only 
+twitter server.
 
 == TODO
 
-* Everything on http://apiwiki.twitter.com/Twitter-API-Documentation that's not implemented
+* Everything on http://apiwiki.twitter.com/Twitter-API-Documentation that's 
+not implemented
 * XML/JSON parsing
 * Better XML/JSON/ATOM/RSS rendering
 * handle basic auth and oauth
@@ -20,7 +67,8 @@ SUPER alpha, ruby API will change!
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+  (if you want to have your own version, that is fine but bump version in a 
+  commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright
