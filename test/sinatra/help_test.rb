@@ -4,7 +4,7 @@ class ApiHelpTest < TwitterServer::TestCase
   class HelpApp < Sinatra::Base
     register Sinatra::TwitterServer
 
-    twitter_help { |params| "ok: #{params.inspect}"}
+    twitter_help
   end
 
   def app
@@ -13,11 +13,11 @@ class ApiHelpTest < TwitterServer::TestCase
 
   it "returns 'Ok' for :xml format" do
     get '/help/test.xml'
-    assert_equal 'ok: {:format=>"xml"}', last_response.body
+    assert_equal Sinatra::TwitterServer::HELP_XML_RESPONSE, last_response.body
   end
 
   it "returns 'Ok' for :json format" do
     get '/help/test.json'
-    assert_equal 'ok: {:format=>"json"}', last_response.body
+    assert_equal Sinatra::TwitterServer::HELP_RESPONSE, last_response.body
   end
 end

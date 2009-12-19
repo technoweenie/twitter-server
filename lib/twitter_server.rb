@@ -33,6 +33,12 @@ module Sinatra
         end
       end
 
+      def render_xml_user(user)
+        render_xml(:user) do |r|
+          r.user(user)
+        end
+      end
+
       def render_xml(root)
         ::TwitterServer.xml_renderer.new(root) do |renderer|
           yield renderer
@@ -47,7 +53,9 @@ module Sinatra
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-home_timeline
     def twitter_statuses_home_timeline
       get "/statuses/home_timeline.:format" do
-        statuses = yield api_options(:format, :since_id, :max_id, :count, :page)
+        options  = api_options(:since_id, :max_id, :count, :page)
+        format   = params[:format]
+        statuses = yield options
         render_xml_statuses(statuses)
       end
     end
@@ -55,7 +63,9 @@ module Sinatra
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-friends_timeline
     def twitter_statuses_friends_timeline
       get "/statuses/friends_timeline.:format" do
-        statuses = yield api_options(:format, :since_id, :max_id, :count, :page)
+        options  = api_options(:since_id, :max_id, :count, :page)
+        format   = params[:format]
+        statuses = yield options
         render_xml_statuses(statuses)
       end
     end
@@ -63,12 +73,16 @@ module Sinatra
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-user_timeline
     def twitter_statuses_user_timeline
       get "/statuses/user_timeline.:format" do
-        statuses = yield api_options(:format, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        options  = api_options(:user_id, :screen_name, :since_id, :max_id, :count, :page)
+        format   = params[:format]
+        statuses = yield options
         render_xml_statuses(statuses)
       end
 
       get "/statuses/user_timeline/:id.:format" do
-        statuses = yield api_options(:format, :id, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        options  = api_options(:id, :user_id, :screen_name, :since_id, :max_id, :count, :page)
+        format   = params[:format]
+        statuses = yield options
         render_xml_statuses(statuses)
       end
     end
@@ -76,17 +90,18 @@ module Sinatra
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-account%C2%A0verify_credentials
     def twitter_account_verify_credentials
       get "/account/verify_credentials.:format" do
-        user = yield api_options(:format)
-        render_xml(:user) do |r|
-          r.user(user)
-        end
+        format  = params[:format]
+        user    = yield
+        render_xml_user(user)
       end
     end
 
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-help%C2%A0test
+    HELP_XML_RESPONSE = '<ok>true</ok>'.freeze
+    HELP_RESPONSE     = 'ok'.freeze
     def twitter_help
       get "/help/test.:format" do
-        yield api_options(:format)
+        params[:format] == 'xml' ? HELP_XML_RESPONSE : HELP_RESPONSE
       end
     end
   end

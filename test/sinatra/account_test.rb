@@ -4,7 +4,7 @@ class ApiAccountTest < TwitterServer::TestCase
   class AccountApp < Sinatra::Base
     register Sinatra::TwitterServer
 
-    twitter_account_verify_credentials { |params| {:id => 1} }
+    twitter_account_verify_credentials { {:id => 1} }
   end
 
   def app

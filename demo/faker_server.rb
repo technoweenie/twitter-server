@@ -21,13 +21,7 @@ $statuses.each do |user, statuses|
   statuses.each { |st| st[:user] = user }
 end
 
-twitter_help do |params|
-  if params[:format] == 'xml'
-    '<ok>true</ok>'
-  else
-    'ok'
-  end
-end
+twitter_help
 
 twitter_statuses_home_timeline do |params|
   $statuses.values.flatten
