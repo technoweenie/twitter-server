@@ -9,3 +9,7 @@ twitter_help do |params|
     'ok'
   end
 end
+
+twitter_account_verify_credentials do |params|
+  %(<?xml version="1.0" encoding="UTF-8"?><user><id>1401881</id></user>)
+end
