@@ -87,6 +87,23 @@ module Sinatra
       end
     end
 
+    # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-users%C2%A0show
+    def twitter_users_show
+      get "/users/show.:format" do
+        options = api_options(:user_id, :screen_name)
+        format  = params[:format]
+        user    = yield options
+        render_xml_user(user)
+      end
+
+      get "/users/show/:id.:format" do
+        options = api_options(:id)
+        format  = params[:format]
+        user    = yield options
+        render_xml_user(user)
+      end
+    end
+
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-account%C2%A0verify_credentials
     def twitter_account_verify_credentials
       get "/account/verify_credentials.:format" do
