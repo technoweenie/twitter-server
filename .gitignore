@@ -1,17 +1,21 @@
+## Move SYSTEM GENERAL .gitignore settings to system-wide area
+#
+#  git config --global core.excludesfile ~/.gitignore
+#
 ## MAC OS
-.DS_Store
-
+#.DS_Store
+#
 ## TEXTMATE
-*.tmproj
-tmtags
-
-## EMACS
-*~
-\#*
-.\#*
-
+#*.tmproj
+#tmtags
+#
+### EMACS
+#*~
+#\#*
+#.\#*
+#
 ## VIM
-*.swp
+#*.swp
 
 ## PROJECT::GENERAL
 coverage
