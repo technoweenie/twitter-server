@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'base64'
 
 module TwitterServer
   class << self
@@ -58,9 +59,10 @@ module Sinatra
 
     def twitter_basic_auth
       before do
-        base64 = env['HTTP_AUTHORIZATION'].gsub(/Basic /, '')
-        user, pass = Base64.decode64(base64).split(":")
-        @auth = yield user, pass
+        if base64 = env['HTTP_AUTHORIZATION']
+          user, pass = Base64.decode64(base64.gsub(/Basic /, '')).split(":")
+          @auth = yield user, pass
+        end
       end
     end
 

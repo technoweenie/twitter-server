@@ -4,6 +4,9 @@ class ApiAccountTest < TwitterServer::TestCase
   class AccountApp < Sinatra::Base
     register Sinatra::TwitterServer
 
+    twitter_basic_auth do |user, pass|
+      {:user => user, :pass => pass}
+    end
     twitter_account_verify_credentials { {:id => 1} }
     twitter_users_show { |params| {:id => 1, :screen_name => params.inspect, :status => {:text => 'holla'}} }
   end
