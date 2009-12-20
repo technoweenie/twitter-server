@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{twitter_server}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["technoweenie"]
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
      "lib/twitter_server.rb",
      "test/helper.rb",
      "test/sinatra/account_test.rb",
+     "test/sinatra/basic_auth_test.rb",
      "test/sinatra/help_test.rb",
      "test/sinatra/statuses_test.rb",
      "twitter_server.gemspec"
@@ -40,6 +41,7 @@ Gem::Specification.new do |s|
   s.test_files = [
     "test/helper.rb",
      "test/sinatra/account_test.rb",
+     "test/sinatra/basic_auth_test.rb",
      "test/sinatra/help_test.rb",
      "test/sinatra/statuses_test.rb"
   ]
