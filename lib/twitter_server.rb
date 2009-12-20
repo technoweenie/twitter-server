@@ -22,7 +22,9 @@ module Sinatra
   module TwitterServer
     module Helpers
       def api_options(*keys)
-        keys.inject({}) do |memo, key|
+        options = {}
+        options[:auth] = @auth if @auth
+        keys.inject(options) do |memo, key|
           params.include?(key.to_s) ? memo.update(key => params[key]) : memo
         end
       end
@@ -52,6 +54,14 @@ module Sinatra
 
     def self.registered(app)
       app.helpers Sinatra::TwitterServer::Helpers
+    end
+
+    def twitter_basic_auth
+      before do
+        base64 = env['HTTP_AUTHORIZATION'].gsub(/Basic /, '')
+        user, pass = Base64.decode64(base64).split(":")
+        @auth = yield user, pass
+      end
     end
 
     # http://apiwiki.twitter.com/Twitter-REST-API-Method%3A-statuses-home_timeline
@@ -112,7 +122,8 @@ module Sinatra
     def twitter_account_verify_credentials
       get "/account/verify_credentials.:format" do
         format  = params[:format]
-        user    = yield
+        options = api_options
+        user    = yield options
         render_xml_user(user)
       end
     end
